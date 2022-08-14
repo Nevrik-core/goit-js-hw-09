@@ -66,7 +66,7 @@ function convertMs(ms) {
 }
 
 function timerStart() {
-  let timeDiff = null;
+  let timeDiff;
     const intervalTimerId = setInterval(() => {
         timeDiff = flatpick.selectedDates[0].getTime() - new Date().getTime();
         const { days, hours, minutes, seconds } = convertMs(timeDiff);
