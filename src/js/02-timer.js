@@ -34,6 +34,8 @@ const options = {
 
 const flatpick = flatpickr("#datetime-picker", options);
 
+
+
 startBtn.addEventListener('click', e => {
     timerStart();
     startBtn.disabled = true;
@@ -43,8 +45,10 @@ startBtn.addEventListener('click', e => {
 
 
 function addLeadingZero(value) {
+
     return String(value).padStart(2, '0');
 }
+
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
@@ -65,16 +69,19 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
+
 function timerStart() {
   let timeDiff;
+
     const intervalTimerId = setInterval(() => {
         timeDiff = flatpick.selectedDates[0].getTime() - new Date().getTime();
         const { days, hours, minutes, seconds } = convertMs(timeDiff);
-        console.log(`${days}:${hours}:${minutes}:${seconds}`);
+        // console.log(`${days}:${hours}:${minutes}:${seconds}`);
         
         if (timeDiff <= 999) {
       clearInterval(intervalTimerId);
-         } 
+      } 
+      
       dataDays.innerHTML = addLeadingZero(days);
       dataHours.innerHTML = addLeadingZero(hours);
       dataMinutes.innerHTML = addLeadingZero(minutes);
