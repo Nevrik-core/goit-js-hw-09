@@ -7,7 +7,7 @@ const form = document.querySelector('form');
 
 const STORAGE_KEY = 'form-data';
 let formData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-// console.log(formData);
+console.log(formData);
 
 form.addEventListener('input', throttle(onInputChange, 500));
 
@@ -20,7 +20,30 @@ function onInputChange(e) {
     
 }
 
-submitBnt.addEventListener('submit', createPromise);
+submitBnt.addEventListener('submit', onSubmit);
+
+function onSubmit(e) {
+  e.preventDefault();
+
+  let delayValue = Number(formData.delay);
+
+
+for (let i = 1; i <= formData.amount; i++) {
+  const promise = createPromise(i, delayValue);
+  // console.log(promise);
+  promise
+    .then(({ position, delay }) => {
+      Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
+    })
+    .catch(({ position, delay }) => {
+    
+      Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
+    });
+
+  delayValue += Number(formData.step);
+ 
+}
+}
 
 function createPromise(position, delay) {
 
