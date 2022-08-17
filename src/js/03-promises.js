@@ -1,56 +1,38 @@
-import throttle from 'lodash.throttle';
 import Notiflix from 'notiflix';
 
-const submitBnt = document.querySelector('button');
-const form = document.querySelector('form');
-// console.log(form);
-
-// const STORAGE_KEY = 'form-data';
-let formData = {};
-// SON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-// 
-// console.log(formData);
-
-form.addEventListener('input', throttle(onInputChange, 500));
+const formEl = document.querySelector('form');
 
 
-function onInputChange(e) {
+formEl.addEventListener('submit', onFormSubmit);
 
-  formData[e.target.name] = e.target.value;
-  
-    // localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
-  console.log(formData);
-    
-}
-
-submitBnt.addEventListener('submit', onSubmit);
-
-function onSubmit(e) {
+function onFormSubmit(e) {
   e.preventDefault();
-  console.log(formData);
-  let delayValue = Number(formData.delay);
 
+  let position = 1;
+  let delay = Number(formEl.elements.delay.value);
+  let step = Number(formEl.elements.step.value);
+  let amount = Number(formEl.elements.amount.value);
 
-for (let i = 1; i <= formData.amount; i++) {
-  const promise = createPromise(i, delayValue);
-  // console.log(promise);
-  promise
-    .then(({ position, delay }) => {
+  for (let i = 0; i < amount; i++) {
+    createPromise(position, delay)
+      .then(({ position, delay }) => {
       Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
     })
     .catch(({ position, delay }) => {
     
       Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
     });
-
-  delayValue += Number(formData.step);
+  position += 1;
+  delay += step;
  
+  }
+  e.currentTarget.reset();
 }
-}
+
 
 function createPromise(position, delay) {
 
-  // localStorage.removeItem(STORAGE_KEY);
+ 
   return new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
 
@@ -64,22 +46,4 @@ function createPromise(position, delay) {
   });
 }
 
-let delayValue = Number(formData.delay);
-
-
-for (let i = 1; i <= formData.amount; i++) {
-  const promise = createPromise(i, delayValue);
-  // console.log(promise);
-  promise
-    .then(({ position, delay }) => {
-      Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
-    })
-    .catch(({ position, delay }) => {
-    
-      Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
-    });
-
-  delayValue += Number(formData.step);
- 
-}
 
